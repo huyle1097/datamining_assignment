@@ -60,7 +60,7 @@ def main():
     # Write csv file
     with open('./tiki_products.csv', 'w', encoding='utf-8-sig') as output:
         writer = csv.writer(output)
-        writer.writerow(["Category","Product_id","Product_name","Price","Rating_value","Rating_count","Also_viewed_items"])
+        writer.writerow(["Category","Sub Category","Product_id","Product_name","Price","Rating_value","Rating_count","Also_viewed_items"])
 
         page_number = 1
         PAGE_LIMIT = 2
