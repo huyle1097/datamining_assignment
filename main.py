@@ -4,7 +4,8 @@ import csv
 
 LINK_PAGE = 'https://tiki.vn/nha-sach-tiki/c8322'
 
-# crawl data by input @product_page using beautifulsoup4
+# crawl tiki product data by input @product_page using beautifulsoup4
+# return @record
 def crawl_data_to_record(product_page):
     sauce = urllib.request.urlopen(product_page).read()
     soup = bs.BeautifulSoup(sauce, 'lxml')
@@ -41,6 +42,7 @@ def crawl_data_to_record(product_page):
         ratingCount = soup.find("meta",  itemprop="ratingCount")
         record.append(ratingCount["content"])
 
+    # Get other viewed products (id)
     other_items = ''
     items = soup.find('div', class_='list style-list')
     if items != None:
@@ -61,10 +63,12 @@ def main():
         writer.writerow(["Category","Product_id","Product_name","Price","Rating_value","Rating_count","Also_viewed_items"])
 
         page_number = 1
+        PAGE_LIMIT = 2
         
-        while page_number < 2:
+        while page_number < PAGE_LIMIT:
             sauce = urllib.request.urlopen(LINK_PAGE + '?page=' + str(page_number)).read()
             soup = bs.BeautifulSoup(sauce, 'lxml')
+            
             product_box_list = soup.find('div', class_='product-box-list')
             for a in product_box_list.find_all('a'):
                 record = crawl_data_to_record(a.get('href'))
