@@ -56,6 +56,24 @@ def crawl_data_to_record(product_page):
 
     return record
 
+# get product pages
+def get_product_pages(LINK_PAGE):
+    current_page = 1
+    PAGE_LIMIT = 10
+    product_pages = []
+    
+    while current_page < PAGE_LIMIT:
+        print('Getting product pages in page ' + str(current_page) + '...')
+        sauce = urllib.request.urlopen(LINK_PAGE + '?page=' + str(current_page)).read()
+        soup = bs.BeautifulSoup(sauce, 'lxml')
+        product_box_list = soup.find('div', class_='product-box-list')
+        for a in product_box_list.find_all('a'):
+            product_pages.append(a.get('href'))
+        current_page += 1
+    print('FINISH GETTING!')
+    print('Already get ' + str(len(product_pages)) + ' product pages')
+    return product_pages
+
 def main():
     # Write csv file
     with open('./tiki_products.csv', 'w', encoding='utf-8-sig') as output:
@@ -64,18 +82,16 @@ def main():
 
         page_number = 1
         PAGE_LIMIT = 2
+        product_pages = get_product_pages(LINK_PAGE)
+        print('Starting to crawl product info on each page...')
+        for page in product_pages:
+            print('Crawling ' + page)
+            record = crawl_data_to_record(page)
+            writer.writerow(record)
         
-        while page_number < PAGE_LIMIT:
-            sauce = urllib.request.urlopen(LINK_PAGE + '?page=' + str(page_number)).read()
-            soup = bs.BeautifulSoup(sauce, 'lxml')
-            
-            product_box_list = soup.find('div', class_='product-box-list')
-            for a in product_box_list.find_all('a'):
-                record = crawl_data_to_record(a.get('href'))
-                writer.writerow(record)
-            page_number += 1
 
 main()
+
     
 
 
