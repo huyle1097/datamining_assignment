@@ -15,8 +15,12 @@ def crawl_data_to_record(product_page):
     ul = soup.find('ul', class_='breadcrumb')
     span = ul.find_all('span')
     product_name = span[-1].text
-    sub_category = span[-2].text
-    category = span[-3].text
+    if len(span) > 2:
+        sub_category = span[-2].text
+        category = span[-3].text
+    else:
+        sub_category = 'None'
+        category = 'None'
 
     record.append(category)
     record.append(sub_category)
@@ -75,10 +79,11 @@ def get_product_pages(LINK_PAGE):
     return product_pages
 
 def main():
+    
     # Write csv file
     with open('./tiki_products.csv', 'w', encoding='utf-8-sig') as output:
         writer = csv.writer(output)
-        writer.writerow(["Category","Sub Category","Product_id","Product_name","Price","Rating_value","Rating_count","Also_viewed_items"])
+        writer.writerow(["Category","Sub Category","Product_id","Product_name","Price","Rating_value","Rating_count","Frequently_bought_together"])
 
         product_pages = get_product_pages(LINK_PAGE)
         print('Starting to crawl product info on each page...')
