@@ -59,7 +59,7 @@ def crawl_data_to_record(product_page):
 # get product pages
 def get_product_pages(LINK_PAGE):
     current_page = 1
-    PAGE_LIMIT = 10
+    PAGE_LIMIT = 2
     product_pages = []
     
     while current_page < PAGE_LIMIT:
@@ -80,15 +80,13 @@ def main():
         writer = csv.writer(output)
         writer.writerow(["Category","Sub Category","Product_id","Product_name","Price","Rating_value","Rating_count","Also_viewed_items"])
 
-        page_number = 1
-        PAGE_LIMIT = 2
         product_pages = get_product_pages(LINK_PAGE)
         print('Starting to crawl product info on each page...')
-        for page in product_pages:
-            print('Crawling ' + page)
-            record = crawl_data_to_record(page)
+        for i in range(len(product_pages)):
+            print("Crawling page {}: {}".format(i + 1, product_pages[i]))
+            record = crawl_data_to_record(product_pages[i])
             writer.writerow(record)
-        
+        print('DONE! All data is exported to csv file.')
 
 main()
 
