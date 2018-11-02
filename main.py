@@ -63,7 +63,7 @@ def crawl_data_to_record(product_page):
 # get product pages
 def get_product_pages(LINK_PAGE):
     current_page = 1
-    PAGE_LIMIT = 2
+    PAGE_LIMIT = 2 #435
     product_pages = []
     
     while current_page < PAGE_LIMIT:
@@ -81,7 +81,7 @@ def get_product_pages(LINK_PAGE):
 def main():
     
     # Write csv file
-    with open('./tiki_products.csv', 'w', encoding='utf-8-sig') as output:
+    with open('./tiki_products3.csv', 'w', newline='', encoding='utf-8-sig') as output:
         writer = csv.writer(output)
         writer.writerow(["Category","Sub Category","Product_id","Product_name","Price","Rating_value","Rating_count","Frequently_bought_together"])
 
