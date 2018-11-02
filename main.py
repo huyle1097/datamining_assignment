@@ -15,12 +15,14 @@ def crawl_data_to_record(product_page):
     ul = soup.find('ul', class_='breadcrumb')
     span = ul.find_all('span')
     product_name = span[-1].text
-    if len(span) > 2:
+    
+    try:
         sub_category = span[-2].text
         category = span[-3].text
-    else:
+    except:
         sub_category = 'None'
         category = 'None'
+        pass
 
     record.append(category)
     record.append(sub_category)
